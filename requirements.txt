@@ -1,0 +1,7 @@
+Flask_Migrate
+alembic
+SQLAlchemy
+Flask_SQLAlchemy
+Flask
+Flask_Script
+mysql-connector
