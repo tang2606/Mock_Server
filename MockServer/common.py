@@ -55,6 +55,8 @@ def insert_mock_data(**kwargs):
         project = kwargs.pop('project')
         url = kwargs.pop('url')
         method = kwargs.pop("method")
+        req = kwargs.pop('req')
+        response = kwargs.pop("response")
     except KeyError:
         return {
             'success': False,
@@ -86,30 +88,52 @@ def insert_mock_data(**kwargs):
         }
 
     else:
-        body = {
-            "name": name,
-            "url": url,
-            "method": method.upper()
-        }
+        # body = {
+        #     "name": name,
+        #     "url": url,
+        #     "method": method.upper(),
+        #     "response": response
+        # }
+        # if isinstance(req, dict):
+        #     pass
+        # else:
+        #     return {
+        #         'success': False,
+        #         'code': '0003',
+        #         'msg': 'body 参数必须是json 格式'
+        #     }
+        print(json.dumps(json.loads(req)))
+        print(type(json.dumps(json.loads(req))))
 
-        body = json.dumps(body, encoding='utf-8', ensure_ascii=False, indent=4, separators=(',', ': '))
-
-        m = models.Api(name=name, body=body, method=method, url=url, project_id=project)
-        db.session.add(m)
         try:
-            db.session.commit()
-            return {
-                'success': True,
-                'code': '0000',
-                'msg': 'success'
-            }
-        except IntegrityError:
-            return {
-                'success': False,
-                'code': '0002',
-                'msg': 'the api {url} is exists'.format(url=url),
-            }
 
+            body = json.dumps(json.loads(req), encoding='utf-8', ensure_ascii=False, indent=4, separators=(',', ': '))
+            print('))_________>>>>>>>>>',body)
+
+
+            m = models.Api(name=name, body=body, method=method, url=url, project_id=project, response=response)
+            db.session.add(m)
+            try:
+                db.session.commit()
+                return {
+                    'success': True,
+                    'code': '0000',
+                    'msg': 'success'
+                }
+            except IntegrityError:
+                return {
+                    'success': False,
+                    'code': '0002',
+                    'msg': 'the api {url} is exists'.format(url=url),
+                }
+
+            except Exception:
+                return {
+                    'success': False,
+                    'code': '0010',
+                    'msg': 'system error',
+                    'traceback': traceback.format_exc()
+                }
         except Exception:
             return {
                 'success': False,
@@ -119,10 +143,12 @@ def insert_mock_data(**kwargs):
             }
 
 
+
 def update_mock_data(index, **kwargs):
     name = kwargs.get('name')
     url = kwargs.get('url')
     method = kwargs.get("method")
+    response = kwargs.get("response")
 
     if name is None:
         return {
@@ -166,6 +192,7 @@ def update_mock_data(index, **kwargs):
         m.name = name
         m.url = url
         m.method = method.upper()
+        m.response = response
         m.body = json.dumps(kwargs, encoding='utf-8', ensure_ascii=False, indent=4, separators=(',', ': '))
         db.session.add(m)
         try:

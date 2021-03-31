@@ -88,10 +88,19 @@ def domain_server(**kwargs):
     """
     used for POST PUT DELETE
     :param kwargs: standard json mock scripts
-    :return: response msg
+    :return: response msg  response
     """
-    data = kwargs.get('data', {})
+    # data = kwargs.get('data', {})
+    data = kwargs.get('response', {})
     invalid = kwargs.get('invalid', {})
+
+
+
+    print("*"*100)
+    print(f'domain_server 中的 \n data= {data}\n invalid=  {invalid}')
+    print("*" * 100)
+
+
     form = {}
     if request.json:
         form = request.json
@@ -101,6 +110,9 @@ def domain_server(**kwargs):
 
     elif request.args:
         form = request.args
+
+
+    print('12312312312',form)
 
     if data is {}:  # do not have any parameters
         return Validator.valid(response=kwargs.get('valid'))

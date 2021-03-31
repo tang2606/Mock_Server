@@ -42,6 +42,7 @@ class MockApi(MethodView):
                 return redirect('/index/')
 
     def post(self):
+
         mock_info = request.json
         msg = insert_mock_data(**mock_info)
         return json.dumps(msg, ensure_ascii=False)
@@ -85,13 +86,15 @@ def dispatch_request(path):
 def addmock():
     print('1111111111111')
 
-    print(request.data)
+    print('我请求的参数是', request.data)
+
+    return {"msg":"success", "code": 200}
 
 
-#
-# @app.errorhandler(404)
-# def url_not_found(error):
-#     return json.dumps({
-#         "status": 404,
-#         "msg": "the request url not found,please check"
-#     })
+
+@app.errorhandler(404)
+def url_not_found(error):
+    return json.dumps({
+        "status": 404,
+        "msg": "the request url not found,please check"
+    })

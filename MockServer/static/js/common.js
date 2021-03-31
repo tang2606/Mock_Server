@@ -27,6 +27,7 @@ function post_mock(url) {
         "name": $('#api_name').val(),
         'project': $('#project').val(),
         'url': $('#url').val(),
+        'req': $('#req').val(),
         'response': $('#response').val(),
         'method': $('#method').val()
 
@@ -37,6 +38,9 @@ function post_mock(url) {
         data: JSON.stringify(data),
         contentType: "application/json",
         success: function (data) {
+
+            console.log(JSON.stringify(data));
+
             response = JSON.parse(data);
             if (response.msg === 'success') {
                 window.location.reload();
