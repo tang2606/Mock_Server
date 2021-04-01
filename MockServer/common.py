@@ -88,59 +88,67 @@ def insert_mock_data(**kwargs):
         }
 
     else:
-        # body = {
-        #     "name": name,
-        #     "url": url,
-        #     "method": method.upper(),
-        #     "response": response
-        # }
-        # if isinstance(req, dict):
-        #     pass
-        # else:
-        #     return {
-        #         'success': False,
-        #         'code': '0003',
-        #         'msg': 'body 参数必须是json 格式'
-        #     }
-        print(json.dumps(json.loads(req)))
-        print(type(json.dumps(json.loads(req))))
+        print(req, type(req))
+        print(response, type(response))
+        json.loads(req)
+        json.loads(response)
 
         try:
 
-            body = json.dumps(json.loads(req), encoding='utf-8', ensure_ascii=False, indent=4, separators=(',', ': '))
-            print('))_________>>>>>>>>>',body)
+            if isinstance(json.loads(req), dict) and isinstance(json.loads(response), dict):
+
+                try:
 
 
-            m = models.Api(name=name, body=body, method=method, url=url, project_id=project, response=response)
-            db.session.add(m)
-            try:
-                db.session.commit()
-                return {
-                    'success': True,
-                    'code': '0000',
-                    'msg': 'success'
-                }
-            except IntegrityError:
+                    body = json.dumps(req, encoding='utf-8', ensure_ascii=False, indent=4, separators=(',', ': '))
+                    response = json.dumps(response, encoding='utf-8', ensure_ascii=False, indent=4, separators=(',', ': '))
+                    m = models.Api(name=name, body=body, method=method, url=url, project_id=project, response=response)
+                    db.session.add(m)
+
+                    try:
+                        db.session.commit()
+                        return {
+                            'success': True,
+                            'code': '0000',
+                            'msg': 'success'
+                        }
+                    except IntegrityError as e:
+                        return {
+                            'success': False,
+                            'code': '0002',
+                            # 'msg': 'the api {url} is exists'.format(url=url),
+                            'msg': e
+                        }
+
+                    except Exception as e:
+                        # print(e)
+                        return {
+                            'success': False,
+                            'code': '0010',
+                            'msg': 'system error',
+                            'traceback': traceback.format_exc()
+                        }
+                except Exception as e:
+                    return {
+                        'success': False,
+                        'code': '0011',
+                        'msg': 'system error',
+                        'traceback': traceback.format_exc(),
+                        'ccc':e
+                    }
+            else:
                 return {
                     'success': False,
-                    'code': '0002',
-                    'msg': 'the api {url} is exists'.format(url=url),
-                }
-
-            except Exception:
-                return {
-                    'success': False,
-                    'code': '0010',
-                    'msg': 'system error',
-                    'traceback': traceback.format_exc()
+                    'code': '0003',
+                    'msg': 'body 和 response 参数必须是json 格式'
                 }
         except Exception:
             return {
                 'success': False,
-                'code': '0010',
-                'msg': 'system error',
-                'traceback': traceback.format_exc()
+                'code': '1003',
+                'msg': 'body 和 response 参数必须是json 格式'
             }
+
 
 
 
