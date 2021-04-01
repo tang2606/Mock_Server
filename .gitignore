@@ -27,7 +27,6 @@ share/python-wheels/
 *.egg
 MANIFEST
 test.py
-.idea/*
 
 
 # PyInstaller
@@ -130,5 +129,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-.idea/misc.xml
 
