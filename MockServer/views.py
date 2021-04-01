@@ -75,11 +75,19 @@ def dispatch_request(path):
     :param path: request url for mock server
     :return: response msg that use default or custom defined
     """
-
+    # print('SLQ 参数')
+    # print(request.path)
+    # print(request.method)
     m = models.Api.query.filter_by(url=request.path, method=request.method).first_or_404()
 
-    body = json.loads(m.body)
-    return domain_server(**body)
+    # print('------>>>>> ',json.loads(m.response))
+    # print("*"*100)
+    data = dict(
+        response=json.loads(m.response),
+        body=json.loads(m.body)
+    )
+
+    return domain_server(**data)
 
 
 @app.route('/addmock/', methods=['POST', ])
