@@ -48,9 +48,24 @@ class MockApi(MethodView):
         return json.dumps(msg, ensure_ascii=False)
 
     def put(self, api_id):
-        body = json.loads(request.json)
+
         try:
-            msg = update_mock_data(api_id, **body)
+            body = json.loads(request.json)
+            print('修改保存：---》》》》》》》》》》》》》》》》》》》》》\n',body)
+
+            api_data = dict(
+                body=body.get('body'),
+                url=body.get('url'),
+                name=body.get('name'),
+                method=body.get('method'),
+                response=body.get('response')
+            )
+
+
+            print('='*100)
+            print(api_data)
+            print('='*100)
+            msg = update_mock_data(api_id, **api_data)
         except UnmappedInstanceError:
             return json.dumps(INVALID, ensure_ascii=False)
 
@@ -76,25 +91,39 @@ def dispatch_request(path):
     :return: response msg that use default or custom defined
     """
     # print('SLQ 参数')
-    # print(request.path)
+    print('请求的接口地址：',request.path)
     # print(request.method)
     m = models.Api.query.filter_by(url=request.path, method=request.method).first_or_404()
 
+    print("*" * 100)
+    print(m.response)
+    print("*" * 100)
     # print('------>>>>> ',json.loads(m.response))
     # print("*"*100)
     data = dict(
         response=json.loads(m.response),
         body=json.loads(m.body)
     )
+    print('++++++++++++++++++++++++data\n',data)
 
     return domain_server(**data)
 
 
-@app.route('/addmock/', methods=['POST', ])
+@app.route('/mocktest')
 def addmock():
-    print('1111111111111')
+    data = models.Api.query.all()
+    print(data)
+    for mock_data in data:
 
-    print('我请求的参数是', request.data)
+        return dict(
+            id=mock_data.id,
+            method=mock_data.method,
+            name=mock_data.name,
+            url=mock_data.url,
+            body=mock_data.body,
+            response=mock_data.response,
+            project_id=mock_data.project_id
+        )
 
     return {"msg":"success", "code": 200}
 

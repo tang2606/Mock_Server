@@ -50,6 +50,7 @@ def insert_project(**kwargs):
 
 
 def insert_mock_data(**kwargs):
+    print('？？？'*100, kwargs)
     try:
         name = kwargs.pop('name')
         project = kwargs.pop('project')
@@ -153,11 +154,15 @@ def insert_mock_data(**kwargs):
 
 
 def update_mock_data(index, **kwargs):
+    # print(f'看一下类型：{kwargs, type(kwargs)}')
+    body = kwargs.get('body')
     name = kwargs.get('name')
     url = kwargs.get('url')
     method = kwargs.get("method")
     response = kwargs.get("response")
 
+    print(f'name=={name}\n url=={url}\n body=={body}\n method=={method}\n response=={response}')
+    print('=='*100)
     if name is None:
         return {
             'success': False,
@@ -200,8 +205,9 @@ def update_mock_data(index, **kwargs):
         m.name = name
         m.url = url
         m.method = method.upper()
-        m.response = response
-        m.body = json.dumps(kwargs, encoding='utf-8', ensure_ascii=False, indent=4, separators=(',', ': '))
+        m.response = json.dumps(response, encoding='utf-8', ensure_ascii=False, indent=4, separators=(',', ': '))
+        m.body = json.dumps(body, encoding='utf-8', ensure_ascii=False, indent=4, separators=(',', ': '))
+
         db.session.add(m)
         try:
             db.session.commit()

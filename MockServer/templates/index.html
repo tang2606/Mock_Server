@@ -116,8 +116,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="post_mock('/mocks/')">Save</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="post_mock('/mocks/')">保存Mock数据</button>
             </div>
         </div>
     </div>
@@ -180,15 +180,21 @@
 
             <span class="block-method block_url">{{ moo.url }}</span>
             <span class="block-summary-description">{{ moo.name }}</span>
-            <button class="btn btn-primary" onclick="put_mock_api('/mocks/{{ moo.id }}/')">Save</button>
-            <button class="btn btn-danger" style="margin-left: 5px" onclick="del_mock_api('/mocks/{{ moo.id }}/')">Del
-            </button>
+            <button class="btn btn-primary" onclick="put_mock_api('/mocks/{{ moo.id }}/')">修改保存</button>
+            <button class="btn btn-danger" style="margin-left: 5px" onclick="del_mock_api('/mocks/{{ moo.id }}/')">删除</button>
             </div>
                 <div class="block_body collapse" id="collapse_api_{{ moo.id }}">
 <pre id="code_{{ moo.id }}" class="ace_editor" style="min-height: 400px">
 <textarea>
-{{ moo.body }}
+    {
+    "body":{{ moo.body }},
+    "url":"{{ moo.url }}",
+    "name":"{{ moo.name }}",
+    "method":"{{ moo.method }}",
+    "response":{{ moo.response }}
+    }
 </textarea>
+
 </pre>
                 </div>
             {% endif %}
@@ -251,5 +257,10 @@
             });
         }
     </script>
+
+
+
+
+
 </body>
 </html>

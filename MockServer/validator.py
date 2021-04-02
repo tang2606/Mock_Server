@@ -123,9 +123,13 @@ def domain_server(**kwargs):
         return Validator.valid(response=kwargs.get('body'))
 
     else:
-        if form != body:
-            return json.dumps(MISS, ensure_ascii=False)
+        if request.method == "POST":
+            if form != body:
+                return json.dumps(MISS, ensure_ascii=False)
 
-        else:
-            return data
+            else:
+                return data
+        elif request.method == "GET":
+            return {'msg':'开发中'}
+
 
