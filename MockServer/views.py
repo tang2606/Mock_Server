@@ -51,7 +51,8 @@ class MockApi(MethodView):
 
         try:
             body = json.loads(request.json)
-            print('修改保存：---》》》》》》》》》》》》》》》》》》》》》\n',body)
+
+            # print('修改保存：---》》》》》》》》》》》》》》》》》》》》》\n',body)
 
             api_data = dict(
                 body=body.get('body'),
@@ -61,10 +62,10 @@ class MockApi(MethodView):
                 response=body.get('response')
             )
 
-
-            print('='*100)
-            print(api_data)
-            print('='*100)
+            #
+            # print('='*100)
+            # print(api_data)
+            # print('='*100)
             msg = update_mock_data(api_id, **api_data)
         except UnmappedInstanceError:
             return json.dumps(INVALID, ensure_ascii=False)
@@ -91,20 +92,20 @@ def dispatch_request(path):
     :return: response msg that use default or custom defined
     """
     # print('SLQ 参数')
-    print('请求的接口地址：',request.path)
+    # print('请求的接口地址：',request.path)
     # print(request.method)
     m = models.Api.query.filter_by(url=request.path, method=request.method).first_or_404()
 
-    print("*" * 100)
-    print(m.response)
-    print("*" * 100)
+    # print("*" * 100)
+    # print(m.response)
+    # print("*" * 100)
     # print('------>>>>> ',json.loads(m.response))
     # print("*"*100)
     data = dict(
         response=json.loads(m.response),
         body=json.loads(m.body)
     )
-    print('++++++++++++++++++++++++data\n',data)
+    # print('++++++++++++++++++++++++data\n',data)
 
     return domain_server(**data)
 

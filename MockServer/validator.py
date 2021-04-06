@@ -90,19 +90,17 @@ def domain_server(**kwargs):
     :param kwargs: standard json mock scripts
     :return: response msg  response
     """
-    print('进入domain_server ')
+    # print('进入domain_server ')
     # data = kwargs.get('data', {})
     data = json.loads(kwargs.get('response'))
     body = json.loads(kwargs.get('body'))
 
-    print("kwargs",kwargs,type(kwargs))
-
-
-    print("*"*100)
-    print(data,type(data))
-    print(body, type(body))
-
-    print("*" * 100)
+    # print("kwargs:", kwargs, type(kwargs))
+    #
+    # print("*"*100)
+    # print(data,type(data))
+    # print(body, type(body))
+    # print("*" * 100)
 
 
     form = {}
@@ -116,9 +114,6 @@ def domain_server(**kwargs):
         form = request.args
 
 
-    print('12312312312',form,type(form))
-    print(body, type(body))
-
     if data is {}:  # do not have any parameters
         return Validator.valid(response=kwargs.get('body'))
 
@@ -130,6 +125,15 @@ def domain_server(**kwargs):
             else:
                 return data
         elif request.method == "GET":
-            return {'msg':'开发中'}
+            parames = json.loads(form.get('data'))
+
+            if parames is {}:  # do not have any parameters
+                return Validator.valid(response=kwargs.get('body'))
+
+            else:
+                if parames != body:
+                    return json.dumps(MISS, ensure_ascii=False)
+                else:
+                    return data
 
 
