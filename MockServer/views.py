@@ -13,6 +13,9 @@ from MockServer.validator import domain_server
 def index():
     p = models.Project.query.order_by(desc('id'))
     m = models.Api.query.all()
+    print('ppppp  开始')
+    print([i for i in m])
+    print('ppppp  结束')
     return render_template('index.html', p=p, m=m)
 
 
@@ -114,9 +117,10 @@ def dispatch_request(path):
 def addmock():
     data = models.Api.query.all()
     print(data)
+    data_list = []
     for mock_data in data:
-
-        return dict(
+        print('mock_data=======> ',mock_data)
+        data_list.append( dict(
             id=mock_data.id,
             method=mock_data.method,
             name=mock_data.name,
@@ -124,9 +128,9 @@ def addmock():
             body=mock_data.body,
             response=mock_data.response,
             project_id=mock_data.project_id
-        )
+        ))
 
-    return {"msg":"success", "code": 200}
+    return {"msg":"success", "code": 200, "data":data_list}
 
 
 

@@ -13,4 +13,4 @@ app.add_url_rule('/mocks/', view_func=mock_view, methods=['POST', ])
 app.add_url_rule('/mocks/<int:api_id>/', view_func=mock_view, methods=['GET', 'PUT', 'DELETE'])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0',port=80)
